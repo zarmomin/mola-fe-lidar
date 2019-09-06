@@ -115,23 +115,23 @@ void LidarOdometry::initialize(const std::string& cfg_block)
     auto cfg = c["params"];
     MRPT_LOG_DEBUG_STREAM("Loading these params:\n" << cfg);
 
-    yamlLoadMemberReq<double>(cfg, "min_dist_xyz_between_keyframes", params_.min_dist_xyz_between_keyframes);
-    yamlLoadMemberOptDeg<double>(cfg, "min_rotation_between_keyframes", params_.min_rotation_between_keyframes);
+    yamlLoadMemberReq<double>(cfg, "min_dist_xyz_between_keyframes", &params_.min_dist_xyz_between_keyframes);
+    yamlLoadMemberOptDeg<double>(cfg, "min_rotation_between_keyframes", &params_.min_rotation_between_keyframes);
 
-    yamlLoadMemberOpt<double>(cfg, "min_time_between_scans", params_.min_time_between_scans);
-    yamlLoadMemberOpt<double>(cfg, "min_icp_goodness", params_.min_icp_goodness);
-    yamlLoadMemberOpt<double>(cfg, "min_icp_goodness_lc", params_.min_icp_goodness_lc);
-    yamlLoadMemberOpt<unsigned int>(cfg, "decimate_to_point_count", params_.decimate_to_point_count);
+    yamlLoadMemberOpt<double>(cfg, "min_time_between_scans", &params_.min_time_between_scans);
+    yamlLoadMemberOpt<double>(cfg, "min_icp_goodness", &params_.min_icp_goodness);
+    yamlLoadMemberOpt<double>(cfg, "min_icp_goodness_lc", &params_.min_icp_goodness_lc);
+    yamlLoadMemberOpt<unsigned int>(cfg, "decimate_to_point_count", &params_.decimate_to_point_count);
 
-    yamlLoadMemberOpt<double>(cfg, "min_dist_to_matching", params_.min_dist_to_matching);
-    yamlLoadMemberOpt<double>(cfg, "max_dist_to_matching", params_.max_dist_to_matching);
-    yamlLoadMemberOpt<double>(cfg, "max_dist_to_loop_closure", params_.max_dist_to_loop_closure);
-    yamlLoadMemberOpt<unsigned int>(cfg, "max_nearby_align_checks", params_.max_nearby_align_checks);
-    yamlLoadMemberOpt<unsigned int>(cfg, "min_topo_dist_to_consider_loopclosure", params_.min_topo_dist_to_consider_loopclosure);
-    yamlLoadMemberOpt<unsigned int>(cfg, "loop_closure_montecarlo_samples", params_.loop_closure_montecarlo_samples);
+    yamlLoadMemberOpt<double>(cfg, "min_dist_to_matching", &params_.min_dist_to_matching);
+    yamlLoadMemberOpt<double>(cfg, "max_dist_to_matching", &params_.max_dist_to_matching);
+    yamlLoadMemberOpt<double>(cfg, "max_dist_to_loop_closure", &params_.max_dist_to_loop_closure);
+    yamlLoadMemberOpt<unsigned int>(cfg, "max_nearby_align_checks", &params_.max_nearby_align_checks);
+    yamlLoadMemberOpt<unsigned int>(cfg, "min_topo_dist_to_consider_loopclosure", &params_.min_topo_dist_to_consider_loopclosure);
+    yamlLoadMemberOpt<unsigned int>(cfg, "loop_closure_montecarlo_samples", &params_.loop_closure_montecarlo_samples);
 
-    yamlLoadMemberOpt<int>(cfg, "viz_decor_decimation", params_.viz_decor_decimation);
-    yamlLoadMemberOpt<float>(cfg, "viz_decor_pointsize", params_.viz_decor_pointsize);
+    yamlLoadMemberOpt<int>(cfg, "viz_decor_decimation", &params_.viz_decor_decimation);
+    yamlLoadMemberOpt<float>(cfg, "viz_decor_pointsize", &params_.viz_decor_pointsize);
 
     load_icp_set_of_params(
         params_.icp_params_with_vel, cfg, "icp_params_with_vel.");
@@ -140,16 +140,16 @@ void LidarOdometry::initialize(const std::string& cfg_block)
     load_icp_set_of_params(
         params_.icp_params_loopclosure, cfg, "icp_params_loopclosure.");
 
-    yamlLoadMemberOpt<bool>(cfg, "debug_save_lidar_odometry", params_.debug_save_lidar_odometry);
-    yamlLoadMemberOpt<bool>(cfg, "debug_save_extra_edges", params_.debug_save_extra_edges);
-    yamlLoadMemberOpt<bool>(cfg, "debug_save_loop_closures", params_.debug_save_loop_closures);
+    yamlLoadMemberOpt<bool>(cfg, "debug_save_lidar_odometry", &params_.debug_save_lidar_odometry);
+    yamlLoadMemberOpt<bool>(cfg, "debug_save_extra_edges", &params_.debug_save_extra_edges);
+    yamlLoadMemberOpt<bool>(cfg, "debug_save_loop_closures", &params_.debug_save_loop_closures);
 
     // Create lidar segmentation algorithm:
     {
         ProfilerEntry tle(profiler_, "filterPointCloud_initialize");
 
         std::string pointcloud_filter_class;
-        yamlLoadMemberReq<std::string>(cfg, "pointcloud_filter_class", pointcloud_filter_class);
+        yamlLoadMemberReq<std::string>(cfg, "pointcloud_filter_class", &pointcloud_filter_class);
 
         ensureYamlEntryExists(cfg, "pointcloud_filter_params");
         auto pc_params = cfg["pointcloud_filter_params"];
@@ -177,7 +177,7 @@ void LidarOdometry::initialize(const std::string& cfg_block)
 
     // Create ICP algorithm:
     {
-        yamlLoadMemberReq<std::string>(cfg, "icp_class", params_.icp_class);
+        yamlLoadMemberReq<std::string>(cfg, "icp_class", &params_.icp_class);
 
         // Test that the class factory works. We will generate a new object
         // for each ICP job later on.
